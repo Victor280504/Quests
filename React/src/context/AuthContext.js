@@ -1,5 +1,5 @@
 import axios from 'axios';
-const url = "https://smdlinos.000webhostapp.com/api/login";
+const url = "http://smdlinos.000webhostapp.com/api/login";
 
 const Context = createContext();
 
