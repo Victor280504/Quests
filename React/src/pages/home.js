@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const urlRecomendedQuests = "http://localhost/api/quests/recomended";
 
-const urlAllQuests = "http://localhost/api/quests";
+const urlAllQuests = "https://smdlinos.000webhostapp.com/api/quests";
 
 
 import {useNavigate} from 'react-router-dom';
