@@ -22,7 +22,7 @@ import Col from "react-bootstrap/Col";
 
 
 //endpoints
-const urlGet = "http://localhost/api/temas";
+const urlGet = "https://smdlinos.000webhostapp.com//api/temas";
 const urlPost = "http://localhost/api/user/register";
 const urlValidate = "http://localhost/api/register/validate";
 

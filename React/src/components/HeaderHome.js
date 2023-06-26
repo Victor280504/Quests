@@ -29,13 +29,13 @@ export default function HeaderHome() {
           <img src={logo} alt="logo" className="mt-4 quest_logo_q"/>
           </Col>
           <Col className="mt-3 itens ">
-          {authenticated && 
+          {/* {authenticated &&  */}
             <Stack direction="horizontal" gap={1}>  
               <img src={estrela} alt="estrela" className="estrela"/>
               <p className="pt-1 pontos ">50</p> 
               <OverlayPerfil/>
             </Stack>
-            }
+            {/* } */}
           </Col>
           
         </Row>
