@@ -22,7 +22,7 @@ function Quest_D (){
     const [quest, setQuest] = useState();
     const [loading, setLoading] = useState(true);
 
-    const url = 'https://smdlinos.000webhostapp.com/api/quests'+id;
+    const url = 'https://smdlinos.000webhostapp.com/api/quests/'+id;
 
     useEffect(() =>{
         const getQuest = async () => { 
