@@ -8,6 +8,8 @@ import { useNavigate} from "react-router-dom";
 
 import React, { createContext, useState, useEffect } from 'react';
 
+const urlUser = 'https://smdquests.000webhostapp.com/api/auth/user';
+
 function AuthProvider({ children }){
 
 
@@ -54,6 +56,26 @@ function AuthProvider({ children }){
 
 	//       });
 	// }
+
+	if(authenticated){
+		useEffect(() =>{
+
+            const token = localStorage.getItem('token');
+             const teste = async () => {
+                 const response = await axios.get(urlUser, {
+                }).then(function (response) {
+                if(response.data){
+                    console.log(response.data)
+                };
+                }).catch(function (error) {
+
+                  console.log(error);
+
+                });
+             }
+             teste();
+      },[]);
+	}
 
 
   	async function handleLogin(e) { // esse teste possivelmente deu certo
