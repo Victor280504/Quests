@@ -22,21 +22,25 @@ function Quest_D (){
     const [quest, setQuest] = useState();
     const [loading, setLoading] = useState(true);
 
-    const url = 'https://smdlinos.000webhostapp.com/api/quests/'+id;
+    const url = 'http://smdquests.000webhostapp.com/api/quests/'+id;
 
     useEffect(() =>{
-        const getQuest = async () => { 
-            const response = await axios.get(url, {
-            }).then(function (response) {
-            if(response.data){
-                setQuest(response.data);
-            };
-            }).catch(function (error) {
+       async function getQuest() { // esse teste possivelmente deu certo
+      
+          const token = localStorage.getItem('token').replace(/["]/g, '');
 
-              console.log(error);
+          fetch(url, {
+            method: 'get'
+          }).then(function(response) {
+                return response.json();
+          }).then(data => {
+                setQuest(data)
+          }).catch(error => {
+                // Lidar com erros
+                console.error(error);
+          });
 
-            });
-         }
+        }
         getQuest();
          
     },[]);

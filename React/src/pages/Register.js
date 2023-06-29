@@ -22,9 +22,9 @@ import Col from "react-bootstrap/Col";
 
 
 //endpoints
-const urlGet = "https://smdlinos.000webhostapp.com//api/temas";
-const urlPost = "http://localhost/api/user/register";
-const urlValidate = "http://localhost/api/register/validate";
+const urlGet = "https://smdquests.000webhostapp.com/api/temas";
+const urlPost = "https://smdquests.000webhostapp.com/api/user/register";
+const urlValidate = "https://smdquests.000webhostapp.com/api/register/validate";
 
 
 export default function Register() {
@@ -47,79 +47,79 @@ export default function Register() {
 
   const [form, setForm] = useState(1);
   
-  const handleSubmit = async (e) =>{
-    e.preventDefault();
+    const handleSubmit = async (e) => { // esse teste possivelmente deu certo
+      e.preventDefault();
 
-    try{
-      const response = await axios.post(urlPost, {
-        name,  
-        nickname, 
-        email, 
-        password, 
-        data_nascimento, 
-        genero, 
-        escolaridade,
-        interesses
-      }).then(function (response) {
+      fetch(urlPost, {
+        method: 'post',
+        body: JSON.stringify({
+          name,  
+          nickname, 
+          email, 
+          password, 
+          data_nascimento, 
+          genero, 
+          escolaridade,
+          interesses
+       })
+      }).then(function(response) {
+          return response.json();
+      }).then(data => {
 
-        if (response.data.register) {
-          setName('');
-          setNickname('');
-          setEmail('');
-          setPassword('');
-          setDataNascimento('');
-          setGenero('');
-          setEscolaridade('');
-          setInteresses('');
-    
-          console.log('Cadastrado Com Sucesso');
-          const token = response.data.token;
-          localStorage.setItem('token', JSON.stringify(token));
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          setAuthenticated(true);
+            if (data.register) {
+                setName('');
+                setNickname('');
+                setEmail('');
+                setPassword('');
+                setDataNascimento('');
+                setGenero('');
+                setEscolaridade('');
+                setInteresses('');
+          
+                console.log('Cadastrado Com Sucesso');
+                const token = data.token;
+                localStorage.setItem('token', JSON.stringify(token));
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                setAuthenticated(true);
+                navigate(`/home/${token}`);
 
-          navigate(`/home/${token}`);
-        }else {
-          console.log("Houve um erro ao cadastrar");
-          navigate("/");
-        }
-      }).catch(function (error) {
-        console.log(error);
+            } else {
+                console.log("Houve um erro ao cadastrar");
+                navigate("/");
+            }
+
+        }).catch(error => {
+          // Lidar com erros
+          console.error(error);
       });
 
-    } catch(error){
-      console.log(error);
     }
-  
-  }
 
 
-   const validate = async () =>{
-    try{
-      const response = await axios.post(urlValidate, {
-        name,  
-        nickname, 
-        email, 
-        password, 
-        data_nascimento, 
-        genero, 
-        escolaridade
-      }).then(function (response) {
+    const validate = async () => { // esse teste possivelmente deu certo
+      fetch(urlValidate, {
+        method: 'post',
+        body: JSON.stringify({
+          name,  
+          nickname, 
+          email, 
+          password, 
+          data_nascimento, 
+          genero, 
+          escolaridade
+       })
+      }).then(function(response) {
+          return response.json();
+      }).then(data => {
 
-        console.log(response.data);
-        chageForm(response.data);
+            chageForm(data);
 
-      }).catch(function (error) { // feedback deve ser inserido aqui
-
-        console.log("Dados Inválidos, tente novamente")
-        // console.log(error);
-
+        }).catch(error => {
+          // Lidar com erros
+          console.error(error, "Dados Inválidos, tente novamente");
       });
-    } catch(error){
-      console.log(error);
+
     }
-  
-  }
 
 
    const chageForm = (response) =>{ // verifica a resposta da validação e muda de form

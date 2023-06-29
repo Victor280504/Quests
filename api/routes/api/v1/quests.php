@@ -10,7 +10,7 @@ $obRouter->get('/quests' , [ //rota funcionando
 	}
 ]);
 
-$obRouter->get('/quests/recomended', [ // rota funcionando
+$obRouter->post('/quests/recomended', [ // rota funcionando
 	function($request, $id)
 	{
 		return new Response(200, Api\Quests::getRecomendedQuests($request));

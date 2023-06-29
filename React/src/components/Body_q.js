@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Star from "./imagens/Start_Point.svg"
 import axios from 'axios';
 
-const urlI = 'http://localhost/api/user/interesses'
+const urlI = 'https://smdquests.000webhostapp.com/api/user/interesses';
 
 import React, { useContext, useEffect, useState } from 'react';
 
@@ -22,23 +22,31 @@ export default function Body_q({quest , auth}) {
   const [matches, setMatches] = useState([]);
 
   if(auth){
-        useEffect(() =>{
-        const token = localStorage.getItem('token');
-         const teste = async () => {
-             const response = await axios.get(urlI, {
-            }).then(function (response) {
-            if(response.data){
-                setInteresses(response.data.interesses);
-            };
-            }).catch(function (error) {
+        
+        useEffect(() => {
+          async function getInteresses() { // esse teste possivelmente deu certo
+    
+              const token = localStorage.getItem('token').replace(/["]/g, '');
 
-              console.log(error);
+              fetch(urlI, {
+                method: 'post',
+                body: JSON.stringify({
+                  token
+              })
+              }).then(function(response) {
+                  return response.json();
+              }).then(data => {
+                  setInteresses(data.interesses);
+                }).catch(error => {
+                  // Lidar com erros
+                  console.error(error);
+              });
 
-            });
-         }
-         teste();
-         setLoading(false);
-        },[]);
+          }
+
+          getInteresses();
+          setLoading(false);
+        }, [])
 
     } else {
 

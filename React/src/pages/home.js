@@ -6,7 +6,7 @@ import HeaderHome from "../components/HeaderHome";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
 
-const urlRecomendedQuests = "http://localhost/api/quests/recomended";
+const urlRecomendedQuests = "https://smdquests.000webhostapp.com/api/quests/recomended";
 
 const urlAllQuests = "https://smdquests.000webhostapp.com/api/quests";
 
@@ -26,24 +26,45 @@ export default function Home(){
     const [quests, setQuests] = useState();
 
     if(authenticated){
-        useEffect(() =>{
+        // useEffect(() =>{
 
-        const token = localStorage.getItem('token');
-         const teste = async () => {
-             const response = await axios.get(urlRecomendedQuests, {
-            }).then(function (response) {
-            if(response.data){
-                setRecomendados(response.data.recomendacoes);
-                setQuests(response.data.allquests)
-            };
-            }).catch(function (error) {
+        // const token = localStorage.getItem('token');
+        //  const teste = async () => {
+        //      const response = await axios.get(urlRecomendedQuests, {
+        //     }).then(function (response) {
+        //     if(response.data){
+        //         setRecomendados(response.data.recomendacoes);
+        //         setQuests(response.data.allquests)
+        //     };
+        //     }).catch(function (error) {
 
-              console.log(error);
+        //       console.log(error);
 
-            });
-         }
-         teste();
-        },[]);
+        //     });
+        //  }
+        //  teste();
+        // },[]);
+        useEffect(() => {
+            async function handleRecomend() { // esse teste possivelmente deu certo
+              const token = localStorage.getItem('token').replace(/["]/g, '');
+              fetch(urlRecomendedQuests, {
+                method: 'post',
+                body: JSON.stringify({
+                    token
+                })
+              }).then(function(response) {
+                    return response.json();
+              }).then(data => {
+                    setRecomendados(data.recomendacoes);
+                    setQuests(data.allquests)
+              }).catch(error => {
+                    // Lidar com erros
+                    console.error(error);
+              });
+            }
+            handleRecomend();
+            
+        }, []);
 
     } else  {
         
@@ -65,6 +86,9 @@ export default function Home(){
              teste();
         },[]);
     }
+
+    
+
 
     return(
         <div className="background alinhamento">

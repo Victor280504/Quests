@@ -8,7 +8,7 @@ import { useNavigate} from "react-router-dom";
 
 import React, { createContext, useState, useEffect } from 'react';
 
-const urlUser = 'https://smdquests.000webhostapp.com/api/auth/user';
+const urlUser = 'https://smdquests.000webhostapp.com/api/user/auth';
 
 function AuthProvider({ children }){
 
@@ -20,7 +20,7 @@ function AuthProvider({ children }){
 	const [login, setLogin] = useState();
   	const [password, setPassword] = useState();
   	const [loading, setLoading] = useState(true);
-	const [user , setUSer] = useState(null);
+	const [user , setUser] = useState(null);
   	const navigate = useNavigate();
 
   	useEffect(() =>{
@@ -29,54 +29,32 @@ function AuthProvider({ children }){
   		if(token && token != 'undefined' && token != undefined){
   			axios.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(token)}`;
   			setAuthenticated(true);
+  			handleUser();
   		}
 
   		setLoading(false);
   	},[]);
 
 
-	// async function handleLogin(e){   //função com axios -- não funciona no 000webhost
-	// 	e.preventDefault();
-	// 	let token;
-	// 	const response = await axios.post(url, {
-	//         login, 
-	//         password, 
-	//     }).then(function (response) {
-	//     	if(response.data){
-	//     		token = response.data;
-	//        		localStorage.setItem('token', JSON.stringify(token));
-	// 			axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-	// 			setAuthenticated(true);
-	// 			navigate('/home/'+token);
-	//     	}
-	       	
-	//       }).catch(function (error) {
+  	async function handleUser() { // esse teste possivelmente deu certo
+	  
+	  const token = localStorage.getItem('token').replace(/["]/g, '');
 
-	//         console.log(error);
+	  fetch('https://smdquests.000webhostapp.com/api/user/auth', {
+	    method: 'post',
+	    body: JSON.stringify({
+		    token
+		})
+	  }).then(function(response) {
+		    return response.json();
+	  }).then(data => {
+	  		setUser(data);
+  	  }).catch(error => {
+		    // Lidar com erros
+		    console.error(error);
+	  });
 
-	//       });
-	// }
-
-	if(authenticated){
-		useEffect(() =>{
-
-            const token = localStorage.getItem('token');
-             const teste = async () => {
-                 const response = await axios.get(urlUser, {
-                }).then(function (response) {
-                if(response.data){
-                    console.log(response.data)
-                };
-                }).catch(function (error) {
-
-                  console.log(error);
-
-                });
-             }
-             teste();
-      },[]);
 	}
-
 
   	async function handleLogin(e) { // esse teste possivelmente deu certo
 	  e.preventDefault();
@@ -91,7 +69,7 @@ function AuthProvider({ children }){
 	  }).then(data => {
 		    const token = data;
 			localStorage.setItem('token', JSON.stringify(token));
-			axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+			axios.defaults.headers.common['Authorization'] = token;
 			setAuthenticated(true);
 			//getUser();
 			navigate('/home/'+token);
