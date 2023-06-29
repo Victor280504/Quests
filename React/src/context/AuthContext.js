@@ -33,51 +33,53 @@ function AuthProvider({ children }){
   	},[]);
 
 
-	async function handleLogin(e){
-		e.preventDefault();
-		let token;
-		const response = await axios.post(url, {
-	        login, 
-	        password, 
-	    }).then(function (response) {
-	    	if(response.data){
-	    		token = response.data;
-	       		localStorage.setItem('token', JSON.stringify(token));
-				axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-				setAuthenticated(true);
-				navigate('/home/'+token);
-	    	}
-	       	
-	      }).catch(function (error) {
-
-	        console.log(error);
-
-	      });
-	}
-
-
-	// async function handleLogin(e){
+	// async function handleLogin(e){   //função com axios -- não funciona no 000webhost
 	// 	e.preventDefault();
-	// 	let token; 
+	// 	let token;
+	// 	const response = await axios.post(url, {
+	//         login, 
+	//         password, 
+	//     }).then(function (response) {
+	//     	if(response.data){
+	//     		token = response.data;
+	//        		localStorage.setItem('token', JSON.stringify(token));
+	// 			axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+	// 			setAuthenticated(true);
+	// 			navigate('/home/'+token);
+	//     	}
+	       	
+	//       }).catch(function (error) {
 
-	//  	fetch(url, {
-	// 		  method: 'POST',
-	// 		  headers: {
-	// 		    'Content-Type': 'application/json'
-	// 		  },
-	// 		  body: JSON.stringify({
-	// 		    login,
-	// 		    password
-	// 		  })
-	// 		}).then(response => {
-	// 		  	response.json()
-	// 		  	console.log(response);
-	// 		  }).catch(error => {
-	// 		    // Lidar com erros
-	// 		    console.error(error);
-	// 		  });
+	//         console.log(error);
 
+	//       });
 	// }
+
+
+  	async function handleLogin(e) { // esse teste possivelmente deu certo
+	  e.preventDefault();
+	  fetch('https://smdquests.000webhostapp.com/api/login', {
+	    method: 'post',
+	    body: JSON.stringify({
+		    login,
+		    password
+		})
+	  }).then(function(response) {
+		    return response.json();
+	  }).then(data => {
+		    const token = data;
+			localStorage.setItem('token', JSON.stringify(token));
+			axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+			setAuthenticated(true);
+			//getUser();
+			navigate('/home/'+token);
+			//console.log(token);
+  	  }).catch(error => {
+		    // Lidar com erros
+		    console.error(error);
+	  });
+
+	}
 
 	function handleLogout(e){
 		e.preventDefault();
