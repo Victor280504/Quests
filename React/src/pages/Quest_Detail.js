@@ -22,7 +22,7 @@ function Quest_D (){
     const [quest, setQuest] = useState();
     const [loading, setLoading] = useState(true);
 
-    const url = 'http://smdquests.000webhostapp.com/api/quests/'+id;
+    const url = 'https://smdquests.000webhostapp.com/api/quests/'+id;
 
     useEffect(() =>{
        async function getQuest() { // esse teste possivelmente deu certo
