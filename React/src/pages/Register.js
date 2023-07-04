@@ -46,7 +46,7 @@ export default function Register() {
   const [form, setForm] = useState(1);
   
   const handleSubmit = async (e) => { // esse teste possivelmente deu certo
-
+    e.preventDefault();
     fetch(urlPost, {
       method: 'post',
       body: JSON.stringify({
@@ -92,7 +92,8 @@ export default function Register() {
 
   }
 
-  const validate = async () => { // esse teste possivelmente deu certo
+  const validate = async (e) => { // esse teste possivelmente deu certo
+    e.preventDefault();
     fetch(urlValidate, {
       method: 'post',
       body: JSON.stringify({
@@ -134,7 +135,7 @@ export default function Register() {
         <Header/>
       <Row className="justify-content-sm-center">
       <Col sm="auto" none="">
-          <Form className="mb-4 rounded p-5 mx-4" onSubmit={handleSubmit} method="Post">
+          <Form className="mb-4 rounded p-5 mx-4" onSubmit={(e) => handleSubmit(e)} method="Post">
           {form === 1 ? <Form1 
           nickname = {(e)=> setNickname(e.target.value)}
           name = {(e)=> setName(e.target.value)}

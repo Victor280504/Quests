@@ -56,7 +56,7 @@ export default function App() {
        
             <Route path = "/quest_d/:id" element = {<Quest_D/>}/>
 
-            <Route path = "/tabletop/:id" element={<Tabletop/>}/> {/*mesmo esquema do quests_d -> as infos só chegam com o header Authenticated*/}
+            <Route path = "/tabletop" element={<Tabletop/>}/> {/*mesmo esquema do quests_d -> as infos só chegam com o header Authenticated*/}
 
           </Routes>
           <br/>

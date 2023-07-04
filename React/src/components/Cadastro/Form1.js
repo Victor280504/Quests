@@ -16,7 +16,7 @@ const Form1 = (props) => {
 
     const alteraForm = (e) => {
         e.preventDefault();
-        props.validate();
+        props.validate(e);
    }
 
     return <>

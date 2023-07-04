@@ -13,7 +13,7 @@ const Inicio = () => {
                 <p className='text_land'>
                     Já pensou se fosse possível receber <strong>horas complementares</strong> ao responder questionários online? Com o <strong>Quests</strong>, isso acaba de se tornar realidade!
                 </p>
-                <Button className="botao" href="/login">CADASTRE-SE JÁ</Button>
+                <Button className="botao" href="/register">CADASTRE-SE JÁ</Button>
             </Col>
             <Col className='pb-5'>
                 <img src={adesivoQuests} className="img-fluid"></img>
