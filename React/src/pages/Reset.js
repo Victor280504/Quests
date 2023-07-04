@@ -1,25 +1,27 @@
+//Styles
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate} from "react-router-dom";
 import "../components/Tela.css"
-import Header from "../components/Header.js";
+
+//Components
+import Footer from "../components/Global/Footer";
+import Header from "../components/Global/Header.js";
 import ChangePassword from "../components/Reset/ChangePassword";
 import SendEmail from "../components/Reset/SendEmail";
 import ConfirmCode from "../components/Reset/ConfirmCode";
 
-
-
-const ulrVerify = 'http://localhost/api/login/reset';
-
-const urlConfirm = "http://localhost/api/reset/code";
-
-const urlChange = "http://localhost/api/user/password";
-
+//Dependencias
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate} from "react-router-dom";
 import axios from 'axios';
-import Footer from "../components/Footer";
+
+//Endpoints
+const ulrVerify = 'https://smdquests.000webhostapp.com/api/login/reset';
+const urlConfirm = "https://smdquests.000webhostapp.com/api/verify/code";
+const urlChange = "https://smdquests.000webhostapp.com/api/user/password";
+
 
 export default function Reset() {
 
@@ -32,66 +34,75 @@ export default function Reset() {
 
   async function handleReset(e){
     e.preventDefault();
+    const token = localStorage.getItem('token_code').replace(/["]/g, '');
+    fetch(urlChange, {
+    method: 'post',
+    body: JSON.stringify({
+      password,
+      token
+    })
+    }).then(function(response) {
+      return response.json();
+    }).then(data => {
 
-    const response = await axios.post(urlChange, {
-          password
-      }).then(function (response) {
-        if(response.data){
+         if(data){
           localStorage.removeItem('token_code');
-          axios.defaults.headers.common['Reset'] = undefined;
           console.log('Senha alterada com sucesso');
           navigate('/login');
-        } 
-        }).catch(function (error) {
+        }
 
-          console.log(error);
+    }).catch(error => {
+      // Lidar com erros
+      console.error(error);
+    });
 
-        });
+
   }
 
+   const sendEmail = async (e) =>  { // esse teste possivelmente deu certo
+    e.preventDefault();
+    let token;
 
-
-  const sendEmail = async (e) => { 
-      let token;
-      const response = await axios.post(ulrVerify, {
-          email
-      }).then(function (response) {
-
-        if(response.data[0]){
-          token = response.data[1];
+    fetch(ulrVerify, {
+    method: 'post',
+    body: JSON.stringify({
+      email
+    })
+    }).then(function(response) {
+      return response.json();
+    }).then(data => {
+        if(data[0]){
+          token = data[1];
           localStorage.setItem('token_code', JSON.stringify(token));
-          axios.defaults.headers.common['Reset'] = `Bearer ${token}`;
-          setter2(response.data[0]);
-
+          setter2(data[0]);
         }
-          
-        }).catch(function (error) {
+    }).catch(error => {
+      // Lidar com erros
+      console.error(error);
+    });
 
-          console.log(error);
-
-        });
   }
 
 
   const sendCode = async (e) => { 
     e.preventDefault();
 
-    const token = localStorage.getItem('token_code');
-      const response = await axios.post(urlConfirm, {
-          code
-      }).then(function (response) {
-
-        console.log(response.data);
-
-        if(response.data){
-          setter3(response.data);
-        }
-  
-        }).catch(function (error) {
-
-          console.log(error);
-
-        });
+    const token = localStorage.getItem('token_code').replace(/["]/g, '');
+    fetch(urlConfirm, {
+    method: 'post',
+    body: JSON.stringify({
+      token,
+      code
+    })
+    }).then(function(response) {
+      return response.json();
+    }).then(data => {
+        setter3(data);
+    }).catch(error => {
+      // Lidar com erros
+      console.error(error);
+    });
+    
   }
 
 
@@ -109,9 +120,12 @@ export default function Reset() {
 
   return ( 
       <div className="">
+
         <Header/>
+
         <Row className="justify-content-sm-center pt-3">
           <Col sm="auto" none="">
+
             <Form className="mb-5 rounded p-5 mx-3 fonte_login" onSubmit ={handleReset}>
 
               {page == 1 ? <SendEmail email={(e) => setEmail(e.target.value)} send={sendEmail}/> :
@@ -119,9 +133,9 @@ export default function Reset() {
               <ChangePassword setPassword={(e)=> setPassword(e.target.value)} password={password}/>}
 
             </Form>
+            
             <Footer/>
-            <div className="espaco">
-            </div>
+
           </Col>
         </Row>
         

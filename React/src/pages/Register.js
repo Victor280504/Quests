@@ -1,27 +1,25 @@
-//CSS
+//Styles
 import "../components/Tela.css"
-
-//hooks
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate, json} from "react-router-dom";
-import { useEffect, useState } from "react";
-import {useFetch} from "../hooks/useFetch";
-import axios from 'axios';
-
-import React, { useContext } from 'react';
-import {Context} from '../context/AuthContext'
-
-//Components
-import Footer from "../components/Footer";
-import Header from "../components/Header"
-import Form1 from "../components/Cadastro/Form1";
-import Form2 from "../components/Cadastro/Form2";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
+//Components
+import Footer from "../components/Global/Footer";
+import Header from "../components/Global/Header"
+import Form1 from "../components/Cadastro/Form1";
+import Form2 from "../components/Cadastro/Form2";
 
-//endpoints
+//hooks
+import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, json} from "react-router-dom";
+import { useEffect, useState } from "react";
+import {useFetch} from "../hooks/useFetch";
+import React, { useContext } from 'react';
+import {Context} from '../context/AuthContext'
+
+//Endpoints
 const urlGet = "https://smdquests.000webhostapp.com/api/temas";
 const urlPost = "https://smdquests.000webhostapp.com/api/user/register";
 const urlValidate = "https://smdquests.000webhostapp.com/api/register/validate";
@@ -47,79 +45,78 @@ export default function Register() {
 
   const [form, setForm] = useState(1);
   
-    const handleSubmit = async (e) => { // esse teste possivelmente deu certo
-      e.preventDefault();
+  const handleSubmit = async (e) => { // esse teste possivelmente deu certo
 
-      fetch(urlPost, {
-        method: 'post',
-        body: JSON.stringify({
-          name,  
-          nickname, 
-          email, 
-          password, 
-          data_nascimento, 
-          genero, 
-          escolaridade,
-          interesses
-       })
-      }).then(function(response) {
-          return response.json();
-      }).then(data => {
+    fetch(urlPost, {
+      method: 'post',
+      body: JSON.stringify({
+        name,  
+        nickname, 
+        email, 
+        password, 
+        data_nascimento, 
+        genero, 
+        escolaridade,
+        interesses
+     })
+    }).then(function(response) {
+        return response.json();
+    }).then(data => {
 
-            if (data.register) {
-                setName('');
-                setNickname('');
-                setEmail('');
-                setPassword('');
-                setDataNascimento('');
-                setGenero('');
-                setEscolaridade('');
-                setInteresses('');
-          
-                console.log('Cadastrado Com Sucesso');
-                const token = data.token;
-                localStorage.setItem('token', JSON.stringify(token));
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                setAuthenticated(true);
-                navigate(`/home/${token}`);
+          if (data.register) {
+              setName('');
+              setNickname('');
+              setEmail('');
+              setPassword('');
+              setDataNascimento('');
+              setGenero('');
+              setEscolaridade('');
+              setInteresses('');
+        
+              console.log('Cadastrado Com Sucesso');
+              const token = data.token;
+              localStorage.setItem('token', JSON.stringify(token));
+              axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+              setAuthenticated(true);
+              navigate(`/home/${token}`);
 
-            } else {
-                console.log("Houve um erro ao cadastrar");
-                navigate("/");
-            }
+          } else {
+              console.log("Houve um erro ao cadastrar");
+              navigate("/");
+          }
 
-        }).catch(error => {
-          // Lidar com erros
-          console.error(error);
-      });
+      }).catch(error => {
+        // Lidar com erros
+        console.error(error);
+    });
 
-    }
+  }
 
+  const validate = async () => { // esse teste possivelmente deu certo
+    fetch(urlValidate, {
+      method: 'post',
+      body: JSON.stringify({
+        name,  
+        nickname, 
+        email, 
+        password, 
+        data_nascimento, 
+        genero, 
+        escolaridade
+     })
+    }).then(function(response) {
+        return response.json();
+    }).then(data => {
 
-    const validate = async () => { // esse teste possivelmente deu certo
-      fetch(urlValidate, {
-        method: 'post',
-        body: JSON.stringify({
-          name,  
-          nickname, 
-          email, 
-          password, 
-          data_nascimento, 
-          genero, 
-          escolaridade
-       })
-      }).then(function(response) {
-          return response.json();
-      }).then(data => {
+          chageForm(data);
 
-            chageForm(data);
+      }).catch(error => {
+        // Lidar com erros
+        console.error(error, "Dados Inválidos, tente novamente");
+    });
 
-        }).catch(error => {
-          // Lidar com erros
-          console.error(error, "Dados Inválidos, tente novamente");
-      });
+  }
 
-    }
 
 
    const chageForm = (response) =>{ // verifica a resposta da validação e muda de form
@@ -133,7 +130,7 @@ export default function Register() {
 
 
   return (
-    <div className="alinhamento">
+    <div className="itens_nav">
         <Header/>
       <Row className="justify-content-sm-center">
       <Col sm="auto" none="">
